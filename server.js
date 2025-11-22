@@ -8,32 +8,31 @@ const { connectDB } = require("./lib/db");
 dotenv.config();
 
 const app = express();
+const AdminFrontendUrl = process.env.ADMIN_FRONTEND_URL;
+const LandingPageFrontendUrl = process.env.LANDING_PAGE_FRONTEND_URL;
+console.log(AdminFrontendUrl, LandingPageFrontendUrl);
 
 // Middlewares
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: (origin, callback) => {
-      callback(null, origin || "*");
-    },
+    origin: [AdminFrontendUrl, LandingPageFrontendUrl],
     credentials: true,
   })
 );
-
 
 app.use("/uploads", express.static("uploads"));
 
 // Routes
 const projectRoutes = require("./routes/project.route");
 const authRoutes = require("./routes/auth.route");
-const inquiryRoutes = require("./routes/inquiry.route")
+const inquiryRoutes = require("./routes/inquiry.route");
 const adminModel = require("./model/admin.model");
-
 
 app.use("/api/v1/project", projectRoutes);
 app.use("/api/v1/auth", authRoutes);
-app.use("/api/v1/inquiry", inquiryRoutes)
+app.use("/api/v1/inquiry", inquiryRoutes);
 
 app.get("/", (req, res) => {
   res.status(200).json({

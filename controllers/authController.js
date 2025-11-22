@@ -45,9 +45,10 @@ exports.login = async (req, res) => {
     // Set cookie
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
-      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      secure: true,
+      sameSite: "None",
+      path: "/",
+      maxAge: 24 * 60 * 60 * 1000,
     });
 
     // Remove password before sending data
@@ -60,7 +61,7 @@ exports.login = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).json({
-      success:false,
+      success: false,
       message: "Failed to login",
       error: error.message,
     });
@@ -71,8 +72,9 @@ exports.logout = (req, res) => {
   try {
     res.clearCookie("token", {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "strict" : "lax",
+      secure: true,
+      sameSite: "None",
+      path: "/",
     });
 
     return res.status(200).json({
