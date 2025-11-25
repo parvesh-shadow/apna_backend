@@ -2,7 +2,7 @@ const InquiryModel = require("../model/Inquiry.model");
 
 exports.submitInquiryForm = async (req, res) => {
   try {
-    const { fullName, mobile, email, source } = req.body;
+    const { fullName, mobile, email, source, projectId } = req.body;
 
     if (!fullName || !mobile || !email) {
       return res.status(400).json({
@@ -17,6 +17,7 @@ exports.submitInquiryForm = async (req, res) => {
       mobile,
       email,
       source,
+      projectId
     });
 
     res.status(201).json({
