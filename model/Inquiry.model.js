@@ -29,7 +29,11 @@ const InquiryFormSchema = new mongoose.Schema(
     // Optional: Store page or project context
     source: {
       type: String,
-      default: "Location Advantage Form",
+      default: "",
+    },
+    projectId: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true }

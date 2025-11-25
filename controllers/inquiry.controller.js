@@ -44,8 +44,31 @@ exports.getInquiry = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      success:false,
+      success: false,
       message: "Error in getting inquiry",
+      error,
+    });
+  }
+};
+
+exports.deleteInquiry = async (req, res) => {
+  try {
+    const id = req.params.id;
+    if(!id){
+      return res.status(401).json({
+        success:false,
+        message:"Id is required"
+      })
+    }
+    await InquiryModel.findByIdAndDelete(id);
+    res.status(200).json({
+      success: true,
+      message: "Inquiry deleted successfully",
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error in deleting inquiry",
       error,
     });
   }

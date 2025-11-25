@@ -40,15 +40,8 @@ const AmenitySchema = new mongoose.Schema(
 
 const TestimonialSchema = new mongoose.Schema(
   {
-    image: String,
-    name: String,
-    address: String,
-    rating: {
-      type: Number,
-      min: 1,
-      max: 5,
-    },
-    paragraph: String,
+    testimonialUrl: String,
+    text: String,
   },
   { _id: false }
 );
@@ -60,7 +53,6 @@ const FAQSchema = new mongoose.Schema(
   },
   { _id: false }
 );
-
 
 // Main Project Schema
 const ProjectSchema = new mongoose.Schema(
@@ -74,7 +66,7 @@ const ProjectSchema = new mongoose.Schema(
       nestedParagraph: String,
       listItems: [ListItemSchema],
       includeInputSection: { type: Boolean, default: false },
-      heroSectionVideoUrl:String
+      heroSectionVideoUrl: String,
     },
 
     // About Section
@@ -158,7 +150,7 @@ const ProjectSchema = new mongoose.Schema(
       ogTitle: String,
       ogDescription: String,
       scripts: [String],
-      slug:String
+      slug: String,
     },
     status: {
       type: String,
