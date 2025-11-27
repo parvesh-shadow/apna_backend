@@ -17,7 +17,7 @@ exports.submitInquiryForm = async (req, res) => {
       mobile,
       email,
       source,
-      projectId
+      projectId,
     });
 
     res.status(201).json({
@@ -55,11 +55,11 @@ exports.getInquiry = async (req, res) => {
 exports.deleteInquiry = async (req, res) => {
   try {
     const id = req.params.id;
-    if(!id){
+    if (!id) {
       return res.status(401).json({
-        success:false,
-        message:"Id is required"
-      })
+        success: false,
+        message: "Id is required",
+      });
     }
     await InquiryModel.findByIdAndDelete(id);
     res.status(200).json({

@@ -62,17 +62,17 @@ exports.getOneProject = async (req, res) => {
   }
 };
 
-exports.getAll = async (req, res) => {
+exports.getAll = async (req, res) => {  
   try {
     const allProjects = await ProjectModel.find().sort({ createdAt: -1 });
     res.status(200).json({
-      success:true,
+      success: true,
       message: "All projects fetched successfully",
       allProjects,
     });
   } catch (error) {
     res.status(500).json({
-      success:false,
+      success: false,
       message: "Error in getting all projects",
       error,
     });
@@ -87,7 +87,7 @@ exports.updateDraft = async (req, res) => {
     Object.keys(data).forEach((key) => {
       try {
         data[key] = JSON.parse(data[key]);
-      } catch (err) {}
+      } catch (err) { }
     });
 
     // Inject file paths into the right place
@@ -146,13 +146,13 @@ exports.getPublished = async (req, res) => {
       status: "publish",
     }).sort({ createdAt: -1 });
     res.status(200).json({
-      success:true,
+      success: true,
       message: "Published project fetched",
       publishedProject,
     });
   } catch (error) {
     res.status(500).json({
-      success:false,
+      success: false,
       message: "Error in getting published project",
       error,
     });
@@ -165,13 +165,13 @@ exports.getDraft = async (req, res) => {
       createdAt: -1,
     });
     res.status(200).json({
-      success:true,
+      success: true,
       message: "Draft project fetched",
       draftProject,
     });
   } catch (error) {
     res.status(500).json({
-      success:false,
+      success: false,
       message: "Error in getting published project",
       error,
     });
@@ -187,7 +187,7 @@ exports.deleteProject = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      success:false,
+      success: false,
       message: "Error in deleting project",
       error,
     });
@@ -196,7 +196,7 @@ exports.deleteProject = async (req, res) => {
 
 exports.check = (req, res) => {
   res.send({
-    success:true,
+    success: true,
     message: "Running from route",
   });
 };

@@ -2,6 +2,8 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const bcrypt = require("bcryptjs");
+const path = require("path");
+const fs = require("fs");
 const { connectDB } = require("./lib/db");
 
 dotenv.config();
@@ -32,10 +34,66 @@ app.use("/api/v1/project", projectRoutes);
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/inquiry", inquiryRoutes);
 
-app.get("/", (req, res) => {
-  res.status(200).json({
-    message: "Server is running",
-  });
+// Serve static files from frontend build
+const frontendDistPath = path.join(__dirname, "../frontend/dist");
+app.use(express.static(frontendDistPath));
+
+// Import SEO template and Project model
+const seoTemplate = require("./views/seoTemplate");
+const Project = require("./model/Project.model");
+
+// SSR Route Handler - Must be after API routes and static files
+// Using regex pattern instead of * for Express 5.x compatibility
+app.get(/^\/(?!api\/|uploads\/|assets\/).*/, async (req, res) => {
+  try {
+    const slug = req.path.slice(1); // Remove leading slash
+
+    // Default SEO values
+    let seoData = {
+      title: "Apna Project",
+      description: "Welcome to Apna Project",
+      scripts: [],
+    };
+
+    // If slug exists, fetch SEO data from database
+    if (slug && slug !== "") {
+      const project = await Project.findOne({ "SEO.slug": slug, status: "published" });
+
+      if (project && project.SEO) {
+        seoData = {
+          title: project.SEO.title || seoData.title,
+          description: project.SEO.metaDescription || seoData.description,
+          scripts: project.SEO.scripts || [],
+        };
+      }
+    }
+
+    // Read the built index.html to extract asset files
+    const indexPath = path.join(frontendDistPath, "index.html");
+    const indexHtml = fs.readFileSync(indexPath, "utf-8");
+
+    // Extract CSS and JS files from the built index.html
+    const cssMatches = indexHtml.match(/href="(\/assets\/[^"]+\.css)"/g) || [];
+    const jsMatches = indexHtml.match(/src="(\/assets\/[^"]+\.js)"/g) || [];
+
+    const cssFiles = cssMatches.map(match => match.match(/href="([^"]+)"/)[1]);
+    const jsFiles = jsMatches.map(match => match.match(/src="([^"]+)"/)[1]);
+
+    // Generate HTML with SEO data
+    const html = seoTemplate({
+      title: seoData.title,
+      description: seoData.description,
+      scripts: seoData.scripts,
+      appHtml: "", // Empty for now, React will hydrate on client side
+      cssFiles,
+      jsFiles,
+    });
+
+    res.send(html);
+  } catch (error) {
+    console.error("SSR Error:", error);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
 // Seed default admin
