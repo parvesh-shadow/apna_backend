@@ -74,6 +74,7 @@ const ProjectSchema = new mongoose.Schema(
       nestedParagraph: String,
       listItems: [ListItemSchema],
       includeInputSection: { type: Boolean, default: false },
+      sold: { type: Boolean, default: false },
       heroSectionVideoUrl: String,
     },
 
