@@ -164,6 +164,7 @@ const ProjectSchema = new mongoose.Schema(
       ogTitle: String,
       ogDescription: String,
       scripts: [String],
+      bodyScripts:[String],
       slug: String,
     },
     status: {

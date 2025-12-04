@@ -80,6 +80,7 @@ const sendLeadToZoho = async (lead) => {
               Phone: lead.mobile,
               Lead_Source: lead.source || "Website",
               Project_Id: lead.projectId || "",
+              Landing_Page_URL: `https://apnaprojectpatna.com/${lead.source}`,
             },
           ],
         };
