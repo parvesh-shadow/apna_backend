@@ -36,7 +36,6 @@ app.use("/api/v1/inquiry", inquiryRoutes);
 
 // Serve static files from frontend build
 const frontendDistPath = path.join(__dirname, "../apna_project/dist/");
-console.log(frontendDistPath, "frontendDistPath");
 app.use(express.static(frontendDistPath, { index: false }));
 
 // Import SEO template and Project model
