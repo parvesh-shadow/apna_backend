@@ -16,8 +16,10 @@ function seoTemplate({
   cssFiles,
   jsFiles,
 }) {
-  const headScriptsRaw = scripts.join("\n");
-  const bodyScriptsRaw = bodyScripts.join("\n");
+  const headScriptsRaw = Array.isArray(scripts) ? scripts.join("\n") : "";
+  const bodyScriptsRaw = Array.isArray(bodyScripts)
+    ? bodyScripts.join("\n")
+    : "";
 
   return `<!DOCTYPE html>
 <html lang="en">
