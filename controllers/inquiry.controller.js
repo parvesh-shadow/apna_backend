@@ -1,6 +1,7 @@
 const InquiryModel = require("../model/Inquiry.model");
 const axios = require("axios");
 const zohoTokenModel = require("../model/zohoToken.model");
+const { sendConfirmationEmail } = require("../lib/resend");
 
 const refreshZohoAccessToken = async () => {
   try {
@@ -135,6 +136,10 @@ exports.submitInquiryForm = async (req, res) => {
     });
     // send lead to zoho
     await sendLeadToZoho(req.body);
+    
+    // Send confirmation email to user
+    await sendConfirmationEmail({ fullName, email, source });
+    
     if (newEntry) {
       res.status(201).json({
         success: true,
